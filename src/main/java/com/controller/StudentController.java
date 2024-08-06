@@ -18,26 +18,26 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class StudentController {
 
 	@Autowired
-	StudentService ss;
+	StudentService studentService;
 	
 	@PostMapping("/addstudent")
 	public Student addStudent(@RequestBody Student s) {
-		return ss.newStudent(s);
+		return studentService.newStudent(s);
 	}
 	
 	@GetMapping("/getstudents")
 	public List<Student> getAllStudent() {
-		return ss.getAllStudent();
+		return studentService.getAllStudent();
 	}
 	
 	@GetMapping("/getallsubject")
 	public List<Subject> getAllSubject() {
-		return ss.getAllSubject();
+		return studentService.getAllSubject();
 	}
 	
 	@GetMapping("/listofallsubjects")
 	public String getAllSubjectName() {
-		return ss.getListOfAllSubject();
+		return studentService.getListOfAllSubject();
 	}
 	
 }
