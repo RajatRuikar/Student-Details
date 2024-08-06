@@ -8,28 +8,31 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 
 @Entity
 public class Student {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private int studentId;
 	private String studentName;
 	private String studentAddress;
 
 	@ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-	private List<Subject> subject;
+	@JoinTable(name = "student_subject", joinColumns = @JoinColumn(name = "student_id"), inverseJoinColumns = @JoinColumn(name = "subject_id"))
+	private List<Subject> subjects;
 
 	public Student() {
 		super();
 	}
 
-	public Student(String studentName, String studentAddress, List<Subject> subject) {
+	public Student(String studentName, String studentAddress, List<Subject> subjects) {
 		super();
 		this.studentName = studentName;
 		this.studentAddress = studentAddress;
-		this.subject = subject;
+		this.subjects = subjects;
 	}
 
 	public String getStudentName() {
@@ -48,12 +51,12 @@ public class Student {
 		this.studentAddress = studentAddress;
 	}
 
-	public List<Subject> getSubject() {
-		return subject;
+	public List<Subject> getSubjects() {
+		return subjects;
 	}
 
-	public void setSubject(List<Subject> subject) {
-		this.subject = subject;
+	public void setSubjects(List<Subject> subjects) {
+		this.subjects = subjects;
 	}
 
 }

@@ -1,9 +1,12 @@
 package com.service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.dao.StudentRepo;
 import com.dao.SubjectRepo;
@@ -14,56 +17,46 @@ import com.model.Subject;
 public class StudentServiceImplementation implements StudentService {
 
 	@Autowired
-	StudentRepo sr;
+	StudentRepo studentRepo;
 
 	@Autowired
-	SubjectRepo sub;
+	SubjectRepo subjectRepo;
 
+	@Transactional
 	@Override
-	public Student newStudent(Student s) {
-		
-		
-		return sr.save(s);
+	public Student newStudent(Student student) {
+
+		List<Subject> existingSubjects = new ArrayList<>();
+
+		for (Subject subject : student.getSubjects()) {
+			Subject existingSubject = subjectRepo.findBySubjectName(subject.getSubjectName());
+			if (existingSubject != null) {
+				existingSubjects.add(existingSubject);
+			} else {
+				existingSubjects.add(subjectRepo.save(subject));
+			}
+		}
+
+		student.setSubjects(existingSubjects);
+		return studentRepo.save(student);
+
 	}
 
-	
-//	List<Subject> s1 = s.getSubject();
-//	if (s1 != null) {
-//		for (Subject x : s1) {
-//			if (sub.findBySubjectName(x.getSubjectName()) == null) {
-//				sub.save(new Subject(x.getSubjectName()));
-//			}
-//		}
-//	}
-
-//	if(sub.findBySubjectName(getListOfAllSubject()))
-	
-	
-//	for (Subject x : s.getSubject()) {
-//		Subject subject = sub.findBySubjectName(x.getSubjectName());
-//		if (subject == null) {
-//			continue;
-//		}else {
-//			sub.save(subject);
-//		}
-//	}
-	
-	
 	@Override
 	public List<Student> getAllStudent() {
-		return sr.findAll();
+		return studentRepo.findAll();
 	}
 
 	@Override
 	public List<Subject> getAllSubject() {
-		return sub.findAll();
+		return subjectRepo.findAll();
 	}
 
 	@Override
 	public String getListOfAllSubject() {
-		String allSubjects = null;
-		for (Subject x : sub.findAll()) {
-			allSubjects = allSubjects + " " + x.getSubjectName();
+		String allSubjects = "";
+		for (Subject subject : subjectRepo.findAll()) {
+			allSubjects = allSubjects + " " + subject.getSubjectName();
 		}
 		return allSubjects;
 	}
