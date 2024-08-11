@@ -20,6 +20,11 @@ public class StudentController {
 	@Autowired
 	StudentService studentService;
 	
+	@GetMapping("/")
+	public String welcomePage() {
+		return "Welcome Page";
+	}
+	
 	@PostMapping("/addstudent")
 	public Student addStudent(@RequestBody Student s) {
 		return studentService.newStudent(s);
