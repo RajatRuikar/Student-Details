@@ -1,5 +1,11 @@
 # **Student-Details Project**
 
+
+**Working on Spring Security** 
+because of that all GET API endpoint will work after entering password display in console and username as "user"
+will update Soon...!
+
+
 Welcome to the Student-Details Project! This application provides a REST API for managing student details and their associated subjects. Follow the instructions below to set up and run the project on your local system.
 
 ## **Prerequisites**
@@ -71,3 +77,4 @@ Verify the database URL in application.properties.
 Check the application logs for any errors if the application fails to start.
 
 **Working on Spring Security** 
+
