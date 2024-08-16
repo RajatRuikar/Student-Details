@@ -29,21 +29,7 @@ public class Configure {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
-//            .authorizeHttpRequests(authorizeRequests ->
-//                authorizeRequests
-//                    .requestMatchers("/listofallsubjects").permitAll() 
-//                    .anyRequest().authenticated() 
-//            )
-//            .formLogin(formLogin ->
-//                formLogin
-//                    .loginPage("/login")
-//                    .permitAll()
-//            )
-//            .logout(logout ->
-//                logout
-//                    .permitAll()
-//            )
-				.authorizeHttpRequests(
+			.authorizeHttpRequests(
 						authorizeRequests -> authorizeRequests.requestMatchers("/listofallsubjects").permitAll()
 								.anyRequest().authenticated() // All other requests require authentication
 				).formLogin(formLogin -> formLogin.loginPage("/login").permitAll() // Allow access to the login page for
