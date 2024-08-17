@@ -26,45 +26,51 @@ import jakarta.servlet.http.HttpServletResponse;
 @EnableWebSecurity
 public class Configure {
 
-	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http
-			.authorizeHttpRequests(
-						authorizeRequests -> authorizeRequests.requestMatchers("/listofallsubjects").permitAll()
-								.anyRequest().authenticated() // All other requests require authentication
-				).formLogin(formLogin -> formLogin.loginPage("/login").permitAll() // Allow access to the login page for
-																					// everyone
-						.successHandler(new SimpleUrlAuthenticationSuccessHandler("/home")) // Redirect after login
-																							// success
-						.failureHandler(new SimpleUrlAuthenticationFailureHandler("/login?error=true")) // Redirect on
-																										// login failure
-				).logout(logout -> logout.permitAll() // Allow access to logout for everyone
-						.logoutSuccessUrl("/login?logout=true") // Redirect after logout success
-				).exceptionHandling(
-						exceptionHandling -> exceptionHandling.accessDeniedHandler(new CustomAccessDeniedHandler()) 
-			);
-		return http.build();
-	}
+    @Bean
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+            .authorizeHttpRequests(authorizeRequests ->
+                authorizeRequests
+                    .requestMatchers("/add/listofallsubjects").permitAll()
+                    .anyRequest().authenticated() // All other requests require authentication
+            )
+            .formLogin(formLogin ->
+                formLogin
+                    .loginPage("/login").permitAll()
+                    .defaultSuccessUrl("/home", true)
+                    .failureUrl("/login?error=true")
+            )
+            .logout(logout ->
+                logout
+                    .permitAll()
+                    .logoutSuccessUrl("/login?logout=true")
+            )
+            .exceptionHandling(exceptionHandling ->
+                exceptionHandling
+                    .accessDeniedHandler(new CustomAccessDeniedHandler())
+            );
+        return http.build();
+    }
 
-	@Bean
-	public UserDetailsService userDetailsService() {
-		UserDetails user = User.withUsername("user").password(passwordEncoder().encode("password")).roles("USER")
-				.build();
-		return new InMemoryUserDetailsManager(user);
-	}
+    @Bean
+    UserDetailsService userDetailsService() {
+        UserDetails user = User.withUsername("user")
+                .password(passwordEncoder().encode("password"))
+                .roles("USER")
+                .build();
+        return new InMemoryUserDetailsManager(user);
+    }
 
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
-	
-	public class CustomAccessDeniedHandler implements AccessDeniedHandler {
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    public class CustomAccessDeniedHandler implements AccessDeniedHandler {
         @Override
         public void handle(HttpServletRequest request, HttpServletResponse response,
                            AccessDeniedException accessDeniedException) throws IOException, ServletException {
-            // Log or handle access denied errors
-            response.sendRedirect("/access-denied"); // Redirect to a custom access denied page
+            response.sendRedirect("/access-denied");
         }
     }
-
 }
