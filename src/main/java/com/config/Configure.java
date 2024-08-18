@@ -25,7 +25,7 @@ import jakarta.servlet.http.HttpServletResponse;
 @Configuration
 @EnableWebSecurity
 public class Configure {
-
+	//some modules are not working need to rework
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
