@@ -25,13 +25,13 @@ import jakarta.servlet.http.HttpServletResponse;
 @Configuration
 @EnableWebSecurity
 public class Configure {
-	//some modules are not working need to rework
+	
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(authorizeRequests ->
                 authorizeRequests
-                    .requestMatchers("/add/listofallsubjects").permitAll()
+                    .requestMatchers("/listofallsubjects").permitAll()
                     .anyRequest().authenticated() // All other requests require authentication
             )
             .formLogin(formLogin ->
